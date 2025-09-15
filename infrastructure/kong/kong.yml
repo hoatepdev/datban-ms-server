@@ -1,0 +1,105 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: user-service
+    url: http://user-service:3001
+    routes:
+      - name: user-routes
+        paths: ["/api/v1/users"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+      - name: jwt
+        config:
+          secret_is_base64: false
+          claims_to_verify:
+            - exp
+
+  - name: restaurant-service
+    url: http://restaurant-service:3002
+    routes:
+      - name: restaurant-routes
+        paths: ["/api/v1/restaurants"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour: 2000
+      - name: jwt
+        config:
+          secret_is_base64: false
+
+  - name: reservation-service
+    url: http://reservation-service:3003
+    routes:
+      - name: reservation-routes
+        paths: ["/api/v1/reservations"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 50
+          hour: 500
+      - name: jwt
+        config:
+          secret_is_base64: false
+
+  - name: payment-service
+    url: http://payment-service:3004
+    routes:
+      - name: payment-routes
+        paths: ["/api/v1/payments"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 20
+          hour: 200
+      - name: jwt
+        config:
+          secret_is_base64: false
+
+  - name: notification-service
+    url: http://notification-service:3005
+    routes:
+      - name: notification-routes
+        paths: ["/api/v1/notifications"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+
+  - name: analytics-service
+    url: http://analytics-service:3006
+    routes:
+      - name: analytics-routes
+        paths: ["/api/v1/analytics"]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 10
+          hour: 100
+
+consumers:
+  - username: datban-client
+    custom_id: datban-app
+    jwt_secrets:
+      - key: datban-key
+        secret: your-jwt-secret # Thay bằng secret từ .env (JWT_ACCESS_SECRET)
+        algorithm: HS256
+        expiration: 86400 # 1 day
+
+plugins:
+  - name: cors
+    config:
+      origins: ["*"]
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+      headers: ["*"]
+      credentials: true
+  - name: request-transformer
+    config:
+      add:
+        headers:
+          - X-Request-ID: "uuid"

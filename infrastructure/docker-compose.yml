@@ -1,0 +1,262 @@
+services:
+  # API Gateway
+  kong:
+    image: kong:3.4
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "8444:8444"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+    volumes:
+      - ./kong/kong.yml:/kong/kong.yml
+    networks:
+      - datban-network
+
+  # Message Broker
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: datban
+      RABBITMQ_DEFAULT_PASS: datban123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - datban-network
+
+  # Databases
+  postgres-users:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: datban_users
+      POSTGRES_USER: datban
+      POSTGRES_PASSWORD: datban123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data
+    networks:
+      - datban-network
+
+  # postgres-reservations:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: datban_reservations
+  #     POSTGRES_USER: datban
+  #     POSTGRES_PASSWORD: datban123
+  #   ports:
+  #     - "5433:5432"
+  #   volumes:
+  #     - postgres_reservations_data:/var/lib/postgresql/data
+  #   networks:
+  #     - datban-network
+
+  # postgres-payments:
+  # image: postgres:15
+  # environment:
+  #   POSTGRES_DB: datban_payments
+  #   POSTGRES_USER: datban
+  #   POSTGRES_PASSWORD: datban123
+  # ports:
+  #   - "5434:5432"
+  # volumes:
+  #   - postgres_payments_data:/var/lib/postgresql/data
+  # networks:
+  #   - datban-network
+
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: datban
+      MONGO_INITDB_ROOT_PASSWORD: datban123
+      MONGO_INITDB_DATABASE: datban_restaurants
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - datban-network
+
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - datban-network
+
+  # Microservices
+  user-service:
+    build:
+      context: ../apps/user-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+      - "50051:50051" # gRPC port
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://datban:datban123@postgres-users:5432/datban_users
+      RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - postgres-users
+      - rabbitmq
+      - redis
+    networks:
+      - datban-network
+
+  # restaurant-service:
+  #   build:
+  #     context: ./apps/restaurant-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3002:3002"
+  #     - "50052:50052" # gRPC port
+  #   environment:
+  #     NODE_ENV: production
+  #     MONGODB_URL: mongodb://datban:datban123@mongodb:27017/datban_restaurants?authSource=admin
+  #     RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+  #     REDIS_URL: redis://redis:6379
+  #   depends_on:
+  #     - mongodb
+  #     - rabbitmq
+  #     - redis
+  #   networks:
+  #     - datban-network
+
+  # reservation-service:
+  #   build:
+  #     context: ./apps/reservation-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3003:3003"
+  #     - "50053:50053" # gRPC port
+  #   environment:
+  #     NODE_ENV: production
+  #     DATABASE_URL: postgresql://datban:datban123@postgres-reservations:5432/datban_reservations
+  #     RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+  #     USER_SERVICE_GRPC: user-service:50051
+  #     RESTAURANT_SERVICE_GRPC: restaurant-service:50052
+  #   depends_on:
+  #     - postgres-reservations
+  #     - rabbitmq
+  #     - user-service
+  #     - restaurant-service
+  #   networks:
+  #     - datban-network
+
+  # payment-service:
+  #   build:
+  #     context: ./apps/payment-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3004:3004"
+  #     - "50054:50054" # gRPC port
+  #   environment:
+  #     NODE_ENV: production
+  #     DATABASE_URL: postgresql://datban:datban123@postgres-payments:5432/datban_payments
+  #     RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+  #     STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+  #   depends_on:
+  #     - postgres-payments
+  #     - rabbitmq
+  #   networks:
+  #     - datban-network
+
+  # notification-service:
+  #   build:
+  #     context: ./apps/notification-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3005:3005"
+  #   environment:
+  #     NODE_ENV: production
+  #     RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+  #     REDIS_URL: redis://redis:6379
+  #     SMTP_HOST: ${SMTP_HOST}
+  #     SMTP_USER: ${SMTP_USER}
+  #     SMTP_PASS: ${SMTP_PASS}
+  #   depends_on:
+  #     - rabbitmq
+  #     - redis
+  #   networks:
+  #     - datban-network
+
+  # analytics-service:
+  #   build:
+  #     context: ./apps/analytics-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3006:3006"
+  #   environment:
+  #     NODE_ENV: production
+  #     MONGODB_URL: mongodb://datban:datban123@mongodb:27017/datban_analytics?authSource=admin
+  #     RABBITMQ_URL: amqp://datban:datban123@rabbitmq:5672
+  #   depends_on:
+  #     - mongodb
+  #     - rabbitmq
+  #   networks:
+  #     - datban-network
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    networks:
+      - datban-network
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    ports:
+      - "9600:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: datban123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - datban-network
+
+  zipkin:
+    image: openzipkin/zipkin:2.24
+    ports:
+      - "9411:9411"
+    environment:
+      STORAGE_TYPE: mem
+    networks:
+      - datban-network
+
+volumes:
+  postgres_users_data:
+  postgres_reservations_data:
+  postgres_payments_data:
+  mongodb_data:
+  redis_data:
+  rabbitmq_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  datban-network:
+    driver: bridge

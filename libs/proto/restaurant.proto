@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package restaurant;
+
+service RestaurantService {
+  rpc GetRestaurant(GetRestaurantRequest) returns (GetRestaurantResponse);
+  rpc CheckAvailability(CheckAvailabilityRequest) returns (CheckAvailabilityResponse);
+  rpc GetMenu(GetMenuRequest) returns (GetMenuResponse);
+}
+
+message Restaurant {
+  string id = 1;
+  string name = 2;
+  Location location = 3;
+  int32 capacity = 4;
+  repeated TimeSlot available_slots = 5;
+}

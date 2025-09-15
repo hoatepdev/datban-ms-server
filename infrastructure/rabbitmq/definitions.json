@@ -1,0 +1,276 @@
+{
+  "rabbit_version": "3.12",
+  "users": [
+    {
+      "name": "datban",
+      "password_hash": "YOUR_HASHED_PASSWORD",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "datban",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": {},
+  "global_parameters": {
+    "basic": {
+      "credit_write_buffer": 131072,
+      "credit_write_adapter": "simple"
+    }
+  },
+  "policies": [
+    {
+      "vhost": "/",
+      "name": "ha-all",
+      "pattern": ".*",
+      "apply-to": "all",
+      "definition": {
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0,
+      "components": {
+        "exchange": true,
+        "queue": true
+      },
+      "resource-timeout": 0
+    }
+  ],
+  "queues": [
+    {
+      "name": "user.reservations",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "restaurant.reservations",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "reservation.payments",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "reservation.notifications",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "payment.reservations",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "notifications.all",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "analytics.all",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "user.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "restaurant.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "reservation.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "payment.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "notification.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "user.events",
+      "vhost": "/",
+      "destination": "user.reservations",
+      "destination_type": "queue",
+      "routing_key": "user.*",
+      "arguments": {}
+    },
+    {
+      "source": "restaurant.events",
+      "vhost": "/",
+      "destination": "restaurant.reservations",
+      "destination_type": "queue",
+      "routing_key": "restaurant.*",
+      "arguments": {}
+    },
+    {
+      "source": "reservation.events",
+      "vhost": "/",
+      "destination": "reservation.payments",
+      "destination_type": "queue",
+      "routing_key": "reservation.created",
+      "arguments": {}
+    },
+    {
+      "source": "reservation.events",
+      "vhost": "/",
+      "destination": "reservation.notifications",
+      "destination_type": "queue",
+      "routing_key": "reservation.*",
+      "arguments": {}
+    },
+    {
+      "source": "payment.events",
+      "vhost": "/",
+      "destination": "payment.reservations",
+      "destination_type": "queue",
+      "routing_key": "payment.*",
+      "arguments": {}
+    },
+    {
+      "source": "user.events",
+      "vhost": "/",
+      "destination": "notifications.all",
+      "destination_type": "queue",
+      "routing_key": "user.*",
+      "arguments": {}
+    },
+    {
+      "source": "restaurant.events",
+      "vhost": "/",
+      "destination": "notifications.all",
+      "destination_type": "queue",
+      "routing_key": "restaurant.*",
+      "arguments": {}
+    },
+    {
+      "source": "reservation.events",
+      "vhost": "/",
+      "destination": "notifications.all",
+      "destination_type": "queue",
+      "routing_key": "reservation.*",
+      "arguments": {}
+    },
+    {
+      "source": "payment.events",
+      "vhost": "/",
+      "destination": "notifications.all",
+      "destination_type": "queue",
+      "routing_key": "payment.*",
+      "arguments": {}
+    },
+    {
+      "source": "user.events",
+      "vhost": "/",
+      "destination": "analytics.all",
+      "destination_type": "queue",
+      "routing_key": "user.*",
+      "arguments": {}
+    },
+    {
+      "source": "restaurant.events",
+      "vhost": "/",
+      "destination": "analytics.all",
+      "destination_type": "queue",
+      "routing_key": "restaurant.*",
+      "arguments": {}
+    },
+    {
+      "source": "reservation.events",
+      "vhost": "/",
+      "destination": "analytics.all",
+      "destination_type": "queue",
+      "routing_key": "reservation.*",
+      "arguments": {}
+    },
+    {
+      "source": "payment.events",
+      "vhost": "/",
+      "destination": "analytics.all",
+      "destination_type": "queue",
+      "routing_key": "payment.*",
+      "arguments": {}
+    },
+    {
+      "source": "notification.events",
+      "vhost": "/",
+      "destination": "analytics.all",
+      "destination_type": "queue",
+      "routing_key": "notification.*",
+      "arguments": {}
+    }
+  ]
+}
