@@ -12,9 +12,6 @@ for (const path of getDirectories('./src').map((p) => `./src/${p}`)) {
 }
 
 scopes.push(
-  'major',
-  'minor',
-  'patch',
   'remove',
   'revert',
   'conflict',
@@ -28,6 +25,19 @@ scopes.push(
   'core',
   'swagger'
 );
+
+// feat! (MAJOR, 1.0.0 → 2.0.0): feat!: 💥 - Signals breaking changes from a major feature introduction.
+// feat (MINOR, 1.0.0 → 1.1.0): ✨ - Represents introducing new features without breaks.
+// fix (PATCH, 1.0.0 → 1.0.1): 🐛 - Directly matches fixing a bug or issue.
+// build (PATCH): build: 🏗️ - For adding or updating configuration files, fitting build tweaks.
+// ci (PATCH): ci: 👷 - Specifically for adding or updating CI build systems.
+// chore (PATCH): chore: 🔧 - Covers maintenance tasks like config or dependency updates.
+// docs (PATCH): docs: 📝 - Explicitly for adding or updating documentation.
+// perf (PATCH): perf: ⚡️ - For performance improvements.
+// refactor (PATCH): refactor: ♻️ - For refactoring code.
+// revert (PATCH): revert: ⏪️ - For reverting changes.
+// style (PATCH): style: 💄 - For UI/style file updates, extending to code formatting.
+// test (PATCH): test: 🧪 - For adding, updating, or passing tests.Ctrl + Shift + P
 
 export default {
   extends: ['@commitlint/config-conventional'],
