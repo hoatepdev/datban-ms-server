@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "typeCheck": true,
+    "builder": {
+      "type": "swc",
+      "options": {
+        "copyFiles": true,
+        "quiet": true,
+        "sync": true,
+        "outDir": "dist",
+        "watch": true,
+        "swcrcPath": ".swcrc"
+      }
+    }
+  }
+}

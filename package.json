@@ -80,6 +80,8 @@
     "@nestjs/microservices": "^11.1.6",
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/typeorm": "^11.0.0",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.13.5",
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
