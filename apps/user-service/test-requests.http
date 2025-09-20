@@ -1,0 +1,95 @@
+### DatBan User Service API Tests
+### Base URL: http://localhost:3001
+
+### 1. Health Check
+GET http://localhost:3001/health
+
+### 2. Register a new user
+POST http://localhost:3001/api/v1/users/register
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "StrongPassword123!",
+  "name": "John Doe",
+  "phone": "+1234567890",
+  "preferences": {
+    "cuisineTypes": ["Italian", "Japanese"],
+    "dietaryRestrictions": ["vegetarian"],
+    "priceRange": {
+      "min": 20,
+      "max": 100
+    },
+    "notifications": {
+      "email": true,
+      "sms": false,
+      "push": true
+    },
+    "language": "en",
+    "timezone": "America/New_York"
+  }
+}
+
+### 3. Login user
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "StrongPassword123!"
+}
+
+### 4. Get user profile (requires token from login)
+GET http://localhost:3001/api/v1/users/profile
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### 5. Update user profile (requires token)
+PUT http://localhost:3001/api/v1/users/profile
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "phone": "+1234567891",
+  "preferences": {
+    "cuisineTypes": ["Mexican", "Thai"],
+    "priceRange": {
+      "min": 30,
+      "max": 150
+    }
+  }
+}
+
+### 6. Refresh token
+POST http://localhost:3001/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "YOUR_REFRESH_TOKEN_HERE"
+}
+
+### 7. Verify token
+POST http://localhost:3001/api/v1/auth/verify-token
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### 8. Change password (requires token)
+POST http://localhost:3001/api/v1/auth/change-password
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "currentPassword": "StrongPassword123!",
+  "newPassword": "NewStrongPassword456!"
+}
+
+### 9. Logout (requires token)
+POST http://localhost:3001/api/v1/auth/logout
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### 10. Get user by ID (requires token)
+GET http://localhost:3001/api/v1/users/123e4567-e89b-12d3-a456-426614174000
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### 11. Get user preferences (requires token)
+GET http://localhost:3001/api/v1/users/preferences/123e4567-e89b-12d3-a456-426614174000
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE

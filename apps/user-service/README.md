@@ -1,98 +1,280 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# DatBan User Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 🎯 Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The User Service is the foundational microservice in the DatBan restaurant reservation system, implementing Domain-Driven Design (DDD), CQRS, and event-driven architecture patterns using NestJS.
 
-## Description
+## 🏗️ Architecture
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Clean Architecture Layers
 
-## Project setup
-
-```bash
-$ npm install
+```
+src/
+├── core/                    # Domain Layer (Enterprise Business Rules)
+│   ├── entities/           # Aggregates, Entities, Value Objects
+│   ├── repositories/       # Repository Interfaces (Ports)
+│   ├── use-cases/         # Business Use Cases
+│   └── events/            # Domain Events
+├── application/            # Application Layer (Use Cases)
+│   ├── commands/          # Command Pattern (CQRS Write Side)
+│   ├── queries/           # Query Pattern (CQRS Read Side)
+│   ├── handlers/          # Event Handlers
+│   └── dto/               # Data Transfer Objects
+├── infrastructure/         # Infrastructure Layer (Adapters)
+│   ├── database/          # Database Adapters (TypeORM)
+│   ├── messaging/         # Message Bus Adapters (RabbitMQ)
+│   ├── repositories/      # Repository Implementations
+│   └── config/            # Configuration
+└── presentation/          # Presentation Layer (Controllers, HTTP)
+    ├── controllers/       # REST API Controllers
+    └── guards/            # Authentication Guards
 ```
 
-## Compile and run the project
+## 🚀 Features
 
+### MVP Features
+- ✅ User Registration
+- ✅ User Login & Authentication
+- ✅ JWT Access & Refresh Tokens
+- ✅ User Profile Management
+- ✅ User Preferences Management
+- ✅ Password Change
+- ✅ Token Verification
+- ✅ Input Validation
+- ✅ Health Checks
+
+### Enterprise Patterns
+- ✅ Domain-Driven Design (DDD)
+- ✅ CQRS (Command Query Responsibility Segregation)
+- ✅ Event Sourcing (Domain Events)
+- ✅ Clean/Onion Architecture
+- ✅ Repository Pattern with Ports & Adapters
+- ✅ Value Objects for Type Safety
+
+## 📋 Prerequisites
+
+- Node.js >= 18.0.0
+- PostgreSQL >= 13
+- npm >= 9.0.0
+
+## ⚡ Quick Start
+
+### 1. Install Dependencies
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
-
+### 2. Environment Setup
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
+# Edit .env with your database credentials
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### 3. Database Setup
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Create database
+createdb datban_users
+
+# Run migrations (when available)
+npm run migration:run
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 4. Start Service
+```bash
+# Development mode
+npm run start:dev
 
-## Resources
+# Production mode
+npm run start:prod
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📚 API Documentation
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Base URL
+```
+http://localhost:3001/api/v1
+```
 
-## Support
+### Authentication
+The API uses JWT Bearer tokens for authentication.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+Authorization: Bearer <jwt_token>
+```
 
-## Stay in touch
+### Authentication Endpoints
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### User Login
+```http
+POST /auth/login
+Content-Type: application/json
 
-## License
+{
+  "email": "user@example.com",
+  "password": "StrongPassword123!"
+}
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Response:
+{
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com", 
+    "name": "John Doe",
+    "phone": "+1234567890"
+  },
+  "tokens": {
+    "accessToken": "eyJhbGciOi...",
+    "refreshToken": "eyJhbGciOi..."
+  }
+}
+```
+
+#### Refresh Token
+```http
+POST /auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOi..."
+}
+```
+
+#### Change Password
+```http
+POST /auth/change-password
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "currentPassword": "OldPassword123!",
+  "newPassword": "NewPassword456!"
+}
+```
+
+#### Verify Token
+```http
+POST /auth/verify-token
+Authorization: Bearer <token>
+```
+
+#### Logout
+```http
+POST /auth/logout
+Authorization: Bearer <token>
+```
+
+### User Management Endpoints
+
+#### User Registration
+```http
+POST /users/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "StrongPassword123!",
+  "name": "John Doe",
+  "phone": "+1234567890",
+  "preferences": {
+    "cuisineTypes": ["Italian", "Japanese"],
+    "dietaryRestrictions": ["vegetarian"],
+    "priceRange": { "min": 20, "max": 100 },
+    "notifications": {
+      "email": true,
+      "sms": false,
+      "push": true
+    },
+    "language": "en",
+    "timezone": "America/New_York"
+  }
+}
+```
+
+#### Get User Profile
+```http
+GET /users/profile
+Authorization: Bearer <token>
+```
+
+#### Update User Profile
+```http
+PUT /users/profile
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "phone": "+1234567891",
+  "preferences": {
+    "cuisineTypes": ["Mexican", "Thai"]
+  }
+}
+```
+
+### Swagger Documentation
+Visit `http://localhost:3001/api/docs` for interactive API documentation.
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+# Unit tests
+npm run test
+
+# Test with coverage
+npm run test:cov
+
+# End-to-end tests
+npm run test:e2e
+```
+
+## 🏗️ Domain Model
+
+### User Aggregate
+The `User` entity serves as the aggregate root with business rule enforcement.
+
+### User Preferences Value Object
+Encapsulates user preferences with immutability and validation.
+
+### Domain Events
+- `UserCreatedEvent` - Published when a new user registers
+- `UserUpdatedEvent` - Published when user profile is updated
+- `UserDeletedEvent` - Published when user is deactivated
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=datban_user
+DATABASE_PASSWORD=datban_password
+DATABASE_NAME=datban_users
+
+# JWT
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
+```
+
+## 🚀 Deployment
+
+### Docker
+```bash
+# Build image
+docker build -t datban/user-service .
+
+# Run container
+docker run -p 3001:3001 datban/user-service
+```
+
+## 🔍 Monitoring
+
+### Health Check
+```bash
+curl http://localhost:3001/health
+```
+
+---
+
+**Built with ❤️ using NestJS, TypeScript, and Clean Architecture**
