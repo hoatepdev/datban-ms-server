@@ -51,7 +51,7 @@ async function bootstrap() {
     });
   });
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 9004;
   await app.listen(port);
 
   logger.log(`🚀 User Service is running on port ${port}`);

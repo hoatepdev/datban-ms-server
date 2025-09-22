@@ -165,9 +165,9 @@ yarn dev:reservation
 
 ```bash
 # Health check all services
-curl http://localhost:3001/health  # User Service
-curl http://localhost:3002/health  # Restaurant Service
-curl http://localhost:3003/health  # Reservation Service
+curl http://localhost:9004/health  # User Service
+curl http://localhost:9006/health  # Restaurant Service
+curl http://localhost:9008/health  # Reservation Service
 
 # View logs
 yarn docker:logs
@@ -179,12 +179,12 @@ yarn docker:logs
 
 | Service                  | Port | Database   | Description                               |
 | ------------------------ | ---- | ---------- | ----------------------------------------- |
-| **User Service**         | 3001 | PostgreSQL | User management, authentication, profiles |
-| **Restaurant Service**   | 3002 | MongoDB    | Restaurant data, menus, availability      |
-| **Reservation Service**  | 3003 | PostgreSQL | Booking management, scheduling            |
-| **Payment Service**      | 3004 | PostgreSQL | Payment processing, billing               |
-| **Notification Service** | 3005 | Redis      | Email, SMS, push notifications            |
-| **Analytics Service**    | 3006 | MongoDB    | Reporting, business intelligence          |
+| **User Service**         | 9004 | PostgreSQL | User management, authentication, profiles |
+| **Restaurant Service**   | 9006 | MongoDB    | Restaurant data, menus, availability      |
+| **Reservation Service**  | 9008 | PostgreSQL | Booking management, scheduling            |
+| **Payment Service**      | 9010 | PostgreSQL | Payment processing, billing               |
+| **Notification Service** | 9012 | Redis      | Email, SMS, push notifications            |
+| **Analytics Service**    | 9014 | MongoDB    | Reporting, business intelligence          |
 
 ### Infrastructure Services
 
@@ -299,7 +299,7 @@ JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=7d
 
 # API Gateway
-KONG_ADMIN_URL=http://localhost:8001
+KONG_ADMIN_URL=http://localhost:9001
 ```
 
 ## 🧪 Testing
@@ -398,7 +398,7 @@ kubectl get services -n datban
 yarn monitoring:up
 
 # Access monitoring dashboards
-open http://localhost:3000    # Grafana (admin/admin)
+open http://localhost:9600    # Grafana (admin/admin)
 open http://localhost:9090    # Prometheus
 open http://localhost:16686   # Jaeger (distributed tracing)
 ```
@@ -407,13 +407,13 @@ open http://localhost:16686   # Jaeger (distributed tracing)
 
 ```bash
 # Service health endpoints
-curl http://localhost:3001/health
-curl http://localhost:3002/health
-curl http://localhost:3003/health
+curl http://localhost:9004/health
+curl http://localhost:9006/health
+curl http://localhost:9008/health
 
 # Infrastructure health
-curl http://localhost:15672   # RabbitMQ Management
-curl http://localhost:8001    # Kong Admin API
+curl http://localhost:9015   # RabbitMQ Management
+curl http://localhost:9001    # Kong Admin API
 ```
 
 ### Log Management

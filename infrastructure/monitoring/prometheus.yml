@@ -3,15 +3,15 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  - job_name: "prometheus"
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ["localhost:9090"] # Prometheus itself
-  - job_name: "user-service"
+      - targets: ['localhost:9090'] # Prometheus itself
+  - job_name: 'user-service'
     static_configs:
-      - targets: ["user-service:3001"] # User Service
-  - job_name: "kong"
+      - targets: ['user-service:9004'] # User Service
+  - job_name: 'kong'
     static_configs:
-      - targets: ["kong:8001"] # Kong Admin API
-  - job_name: "rabbitmq"
+      - targets: ['kong:8001'] # Kong Admin API
+  - job_name: 'rabbitmq'
     static_configs:
-      - targets: ["rabbitmq:15672"] # RabbitMQ Management
+      - targets: ['rabbitmq:15672'] # RabbitMQ Management

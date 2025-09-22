@@ -33,6 +33,7 @@ src/
 ## 🚀 Features
 
 ### MVP Features
+
 - ✅ User Registration
 - ✅ User Login & Authentication
 - ✅ JWT Access & Refresh Tokens
@@ -44,6 +45,7 @@ src/
 - ✅ Health Checks
 
 ### Enterprise Patterns
+
 - ✅ Domain-Driven Design (DDD)
 - ✅ CQRS (Command Query Responsibility Segregation)
 - ✅ Event Sourcing (Domain Events)
@@ -60,17 +62,20 @@ src/
 ## ⚡ Quick Start
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Environment Setup
+
 ```bash
 cp .env.example .env
 # Edit .env with your database credentials
 ```
 
 ### 3. Database Setup
+
 ```bash
 # Create database
 createdb datban_users
@@ -80,6 +85,7 @@ npm run migration:run
 ```
 
 ### 4. Start Service
+
 ```bash
 # Development mode
 npm run start:dev
@@ -91,11 +97,13 @@ npm run start:prod
 ## 📚 API Documentation
 
 ### Base URL
+
 ```
-http://localhost:3001/api/v1
+http://localhost:9004/api/v1
 ```
 
 ### Authentication
+
 The API uses JWT Bearer tokens for authentication.
 
 ```bash
@@ -105,6 +113,7 @@ Authorization: Bearer <jwt_token>
 ### Authentication Endpoints
 
 #### User Login
+
 ```http
 POST /auth/login
 Content-Type: application/json
@@ -118,7 +127,7 @@ Response:
 {
   "user": {
     "id": "uuid",
-    "email": "user@example.com", 
+    "email": "user@example.com",
     "name": "John Doe",
     "phone": "+1234567890"
   },
@@ -130,6 +139,7 @@ Response:
 ```
 
 #### Refresh Token
+
 ```http
 POST /auth/refresh
 Content-Type: application/json
@@ -140,6 +150,7 @@ Content-Type: application/json
 ```
 
 #### Change Password
+
 ```http
 POST /auth/change-password
 Authorization: Bearer <token>
@@ -152,12 +163,14 @@ Content-Type: application/json
 ```
 
 #### Verify Token
+
 ```http
 POST /auth/verify-token
 Authorization: Bearer <token>
 ```
 
 #### Logout
+
 ```http
 POST /auth/logout
 Authorization: Bearer <token>
@@ -166,6 +179,7 @@ Authorization: Bearer <token>
 ### User Management Endpoints
 
 #### User Registration
+
 ```http
 POST /users/register
 Content-Type: application/json
@@ -191,12 +205,14 @@ Content-Type: application/json
 ```
 
 #### Get User Profile
+
 ```http
 GET /users/profile
 Authorization: Bearer <token>
 ```
 
 #### Update User Profile
+
 ```http
 PUT /users/profile
 Authorization: Bearer <token>
@@ -212,11 +228,13 @@ Content-Type: application/json
 ```
 
 ### Swagger Documentation
-Visit `http://localhost:3001/api/docs` for interactive API documentation.
+
+Visit `http://localhost:9004/api/docs` for interactive API documentation.
 
 ## 🧪 Testing
 
 ### Run Tests
+
 ```bash
 # Unit tests
 npm run test
@@ -231,12 +249,15 @@ npm run test:e2e
 ## 🏗️ Domain Model
 
 ### User Aggregate
+
 The `User` entity serves as the aggregate root with business rule enforcement.
 
 ### User Preferences Value Object
+
 Encapsulates user preferences with immutability and validation.
 
 ### Domain Events
+
 - `UserCreatedEvent` - Published when a new user registers
 - `UserUpdatedEvent` - Published when user profile is updated
 - `UserDeletedEvent` - Published when user is deactivated
@@ -244,6 +265,7 @@ Encapsulates user preferences with immutability and validation.
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 # Database
 DATABASE_HOST=localhost
@@ -260,19 +282,21 @@ JWT_EXPIRES_IN=7d
 ## 🚀 Deployment
 
 ### Docker
+
 ```bash
 # Build image
 docker build -t datban/user-service .
 
 # Run container
-docker run -p 3001:3001 datban/user-service
+docker run -p 9004:9004 datban/user-service
 ```
 
 ## 🔍 Monitoring
 
 ### Health Check
+
 ```bash
-curl http://localhost:3001/health
+curl http://localhost:9004/health
 ```
 
 ---

@@ -1,12 +1,12 @@
-_format_version: "3.0"
+_format_version: '3.0'
 _transform: true
 
 services:
   - name: user-service
-    url: http://user-service:3001
+    url: http://user-service:9004
     routes:
       - name: user-routes
-        paths: ["/api/v1/users"]
+        paths: ['/api/v1/users']
     plugins:
       - name: rate-limiting
         config:
@@ -19,10 +19,10 @@ services:
             - exp
 
   - name: restaurant-service
-    url: http://restaurant-service:3002
+    url: http://restaurant-service:9006
     routes:
       - name: restaurant-routes
-        paths: ["/api/v1/restaurants"]
+        paths: ['/api/v1/restaurants']
     plugins:
       - name: rate-limiting
         config:
@@ -33,10 +33,10 @@ services:
           secret_is_base64: false
 
   - name: reservation-service
-    url: http://reservation-service:3003
+    url: http://reservation-service:9008
     routes:
       - name: reservation-routes
-        paths: ["/api/v1/reservations"]
+        paths: ['/api/v1/reservations']
     plugins:
       - name: rate-limiting
         config:
@@ -47,10 +47,10 @@ services:
           secret_is_base64: false
 
   - name: payment-service
-    url: http://payment-service:3004
+    url: http://payment-service:9010
     routes:
       - name: payment-routes
-        paths: ["/api/v1/payments"]
+        paths: ['/api/v1/payments']
     plugins:
       - name: rate-limiting
         config:
@@ -61,10 +61,10 @@ services:
           secret_is_base64: false
 
   - name: notification-service
-    url: http://notification-service:3005
+    url: http://notification-service:9012
     routes:
       - name: notification-routes
-        paths: ["/api/v1/notifications"]
+        paths: ['/api/v1/notifications']
     plugins:
       - name: rate-limiting
         config:
@@ -72,10 +72,10 @@ services:
           hour: 1000
 
   - name: analytics-service
-    url: http://analytics-service:3006
+    url: http://analytics-service:9014
     routes:
       - name: analytics-routes
-        paths: ["/api/v1/analytics"]
+        paths: ['/api/v1/analytics']
     plugins:
       - name: rate-limiting
         config:
@@ -94,12 +94,12 @@ consumers:
 plugins:
   - name: cors
     config:
-      origins: ["*"]
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
-      headers: ["*"]
+      origins: ['*']
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+      headers: ['*']
       credentials: true
   - name: request-transformer
     config:
       add:
         headers:
-          - X-Request-ID: "uuid"
+          - X-Request-ID: 'uuid'

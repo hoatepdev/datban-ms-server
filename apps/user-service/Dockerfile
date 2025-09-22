@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # Expose port của service
-EXPOSE 3001
+EXPOSE 9004
 
 # Chạy ứng dụng
 CMD ["npm", "run", "start:prod"]

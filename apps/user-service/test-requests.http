@@ -1,11 +1,11 @@
 ### DatBan User Service API Tests
-### Base URL: http://localhost:3001
+### Base URL: http://localhost:9004
 
 ### 1. Health Check
-GET http://localhost:3001/health
+GET http://localhost:9004/health
 
 ### 2. Register a new user
-POST http://localhost:3001/api/v1/users/register
+POST http://localhost:9004/api/v1/users/register
 Content-Type: application/json
 
 {
@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 
 ### 3. Login user
-POST http://localhost:3001/api/v1/auth/login
+POST http://localhost:9004/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -40,11 +40,11 @@ Content-Type: application/json
 }
 
 ### 4. Get user profile (requires token from login)
-GET http://localhost:3001/api/v1/users/profile
+GET http://localhost:9004/api/v1/users/profile
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ### 5. Update user profile (requires token)
-PUT http://localhost:3001/api/v1/users/profile
+PUT http://localhost:9004/api/v1/users/profile
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 Content-Type: application/json
 
@@ -61,7 +61,7 @@ Content-Type: application/json
 }
 
 ### 6. Refresh token
-POST http://localhost:3001/api/v1/auth/refresh
+POST http://localhost:9004/api/v1/auth/refresh
 Content-Type: application/json
 
 {
@@ -69,11 +69,11 @@ Content-Type: application/json
 }
 
 ### 7. Verify token
-POST http://localhost:3001/api/v1/auth/verify-token
+POST http://localhost:9004/api/v1/auth/verify-token
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ### 8. Change password (requires token)
-POST http://localhost:3001/api/v1/auth/change-password
+POST http://localhost:9004/api/v1/auth/change-password
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 Content-Type: application/json
 
@@ -83,13 +83,13 @@ Content-Type: application/json
 }
 
 ### 9. Logout (requires token)
-POST http://localhost:3001/api/v1/auth/logout
+POST http://localhost:9004/api/v1/auth/logout
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ### 10. Get user by ID (requires token)
-GET http://localhost:3001/api/v1/users/123e4567-e89b-12d3-a456-426614174000
+GET http://localhost:9004/api/v1/users/123e4567-e89b-12d3-a456-426614174000
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ### 11. Get user preferences (requires token)
-GET http://localhost:3001/api/v1/users/preferences/123e4567-e89b-12d3-a456-426614174000
+GET http://localhost:9004/api/v1/users/preferences/123e4567-e89b-12d3-a456-426614174000
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
